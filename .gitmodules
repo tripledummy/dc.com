@@ -4,3 +4,6 @@
 [submodule "projects/trends.bar/src/futuremodules"]
 	path = projects/trends.bar/src/futuremodules
 	url = git@github.com:ziocleto/futuremodules.git
+[submodule "projects/doublecanny.com/src/futuremodules"]
+	path = projects/doublecanny.com/src/futuremodules
+	url = git@github.com:ziocleto/futuremodules.git
