@@ -1,0 +1,69 @@
+{
+  "functions": [
+    {
+      "type": "2d",
+      "key": "Cases",
+      "datasets": [
+        {
+          "actions": [
+            {
+              "csv": {
+                "label": "Country",
+                "x": "Date",
+                "y": "Confirmed"
+              },
+              "dataSequence": "Cumulative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "2d",
+      "key": "Deaths",
+      "datasets": [
+        {
+          "actions": [
+            {
+              "csv": {
+                "label": "Country",
+                "x": "Date",
+                "y": "Deaths"
+              },
+              "dataSequence": "Cumulative"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "2d",
+      "key": "Recovered",
+      "datasets": [
+        {
+          "actions": [
+            {
+              "csv": {
+                "label": "Country",
+                "x": "Date",
+                "y": "Recovered"
+              },
+              "dataSequence": "Cumulative"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "graphType": [
+    "Date",
+    "Int"
+  ],
+  "source": "https://github.com/datasets/covid-19",
+  "sourceName": "Johns Hopkins University Center for Systems Science and Engineering",
+  "timestamp": "embedded",
+  "timestampFormat": "YYYY-MM-DD",
+  "sourceDocument": "https://raw.githubusercontent.com/datasets/covid-19/master/data/countries-aggregated.csv",
+  "urlParser": "documentDirect",
+  "version": "v2"
+}

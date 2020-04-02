@@ -1,0 +1,56 @@
+name: Build and Deploy
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: true
+        submodules: true
+    - uses: webfactory/ssh-agent@v0.2.0
+      with:
+        ssh-private-key: ${{ secrets.SECRET_PRIVATE_DEPLOY_KEY }}
+    
+    - name: Build portal
+      run: docker build -t ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.EH_CLOUD_HOST }} --build-arg REACT_APP_EH_CLOUD_HOST_ARG=${{ secrets.EH_CLOUD_HOST }} --build-arg REACT_APP_EH_ANTIFORGERYTOKEN_COOKIE_ARG=${{ secrets.EH_ANTIFORGERYTOKEN_COOKIE }} ./projects/${{ secrets.EH_CLOUD_HOST }}
+
+    - name: Build portal-graphql-api
+      run: docker build -t ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.EH_CLOUD_HOST }}-graphql-api ./projects/${{ secrets.EH_CLOUD_HOST }}-graphql-api
+
+    - name: Docker hub login
+      run: echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_ID }} --password-stdin
+              
+    - name: Docker Push portal
+      run: docker push ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.EH_CLOUD_HOST }}
+
+    - name: Docker Push portal-graphql-api
+      run: docker push ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.EH_CLOUD_HOST }}-graphql-api
+
+    - name: Copy deploy script via scp.
+      run: scp -oStrictHostKeyChecking=no ${{ github.workspace }}/deploy/docker-compose/docker-compose.yml ${{ secrets.DROPLET_USER}}@${{ secrets.DROPLET_IP }}:/
+    - name: Deploy. (Signal cloud hosting via SSH to put new dockers live)
+      run: >
+        ssh -oStrictHostKeyChecking=no -v ${{ secrets.DROPLET_USER}}@${{ secrets.DROPLET_IP }} 
+        'cd / && 
+        export MTN_DB_PATH=${{ secrets.MTN_DB_PATH }} && 
+        export EH_MONGO_DEFAULT_DB=${{ secrets.EH_MONGO_DEFAULT_DB }} && 
+        export EH_MONGO_PATH=${{ secrets.EH_MONGO_PATH }} && 
+        export EH_MONGO_REPLICA_SET_NAME=${{ secrets.EH_MONGO_REPLICA_SET_NAME }} && 
+        export EH_MASTER_TOKEN="${{ secrets.EH_MASTER_TOKEN }}" && 
+        export EH_SEND_GRID_TOKEN="${{ secrets.EH_SEND_GRID_TOKEN }}" && 
+        export EH_CLOUD_HOST=${{ secrets.EH_CLOUD_HOST }} && 
+        export EH_TOKEN_COOKIE=${{ secrets.EH_TOKEN_COOKIE }} && 
+        export EH_ANTIFORGERYTOKEN_COOKIE=${{ secrets.EH_ANTIFORGERYTOKEN_COOKIE }} && 
+        export EH_JWT_EXPIRES_SECONDS=${{ secrets.EH_JWT_EXPIRES_SECONDS }} && 
+        docker-compose down &&        
+        docker-compose pull && 
+        docker-compose up -d'
