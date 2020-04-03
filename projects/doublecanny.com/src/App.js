@@ -41,7 +41,7 @@ const App = () => {
         <Route exact path="/login" component={Login}/>
         <Route exact path="/dashboarduser" render={ () => <DashboardUser auth={authApi}/> } />
         <Route path="/dashboardproject" render={ () => <DashboardProject auth={authApi}/> }/>
-        <Route path="/rooms/:usernameSplit" component={TrendPage}/>
+        <Route path="/rooms/:usernameSplit" render={ () => <TrendPage auth={authApi}/> }/>
       </Switch>
       <EHAlert/>
     </Body>
