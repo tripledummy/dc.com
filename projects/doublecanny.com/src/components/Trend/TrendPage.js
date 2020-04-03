@@ -1,6 +1,6 @@
-import React, {Fragment, useEffect} from "react";
+import React, {Fragment} from "react";
 import {getUserName, isUserAuthenticated} from "../../futuremodules/auth/authAccessors";
-import {Redirect} from "react-router-dom";
+import {log, logError} from "../../futuremodules/utils/utils";
 
 const TrendPage = ({auth}) => {
 
@@ -20,8 +20,7 @@ const TrendPage = ({auth}) => {
   };
 
   const myUsername= getUserName(auth);
-  const myHostname = "localhost/webrtc/";
-  log("Hostname: " + myHostname);
+  const myHostname = `${process.env.REACT_APP_EH_CLOUD_HOST}/webrtc/`;
   var connection = null;
   var clientID = 0;
   var targetUsername = null;      // To store username of other peer
@@ -30,22 +29,6 @@ const TrendPage = ({auth}) => {
   var webcamStream = null;        // MediaStream from webcam
 
   connect();
-
-// Output logging information to console.
-
-  function log(text) {
-    var time = new Date();
-
-    console.log("[" + time.toLocaleTimeString() + "] " + text);
-  }
-
-// Output an error message to console.
-
-  function log_error(text) {
-    var time = new Date();
-
-    console.trace("[" + time.toLocaleTimeString() + "] " + text);
-  }
 
 // Send a JavaScript object by converting it to JSON and sending
 // it as a message on the WebSocket connection.
@@ -151,8 +134,8 @@ const TrendPage = ({auth}) => {
         // Unknown message; output to console for debugging.
 
         default:
-          log_error("Unknown message received:");
-          log_error(msg);
+          logError("Unknown message received:");
+          logError(msg);
       }
 
       // If there's text to insert into the chat buffer, do so now, then
@@ -616,7 +599,7 @@ const TrendPage = ({auth}) => {
 // error, so we won't present a message in that situation.
 
   function handleGetUserMediaError(e) {
-    log_error(e);
+    logError(e);
     switch (e.name) {
       case "NotFoundError":
         alert("Unable to open your call because no camera and/or microphone" +
@@ -642,7 +625,7 @@ const TrendPage = ({auth}) => {
 // error message should be displayed.
 
   function reportError(errMessage) {
-    log_error(`Error ${errMessage.name}: ${errMessage.message}`);
+    logError(`Error ${errMessage.name}: ${errMessage.message}`);
   }
 
   return (
