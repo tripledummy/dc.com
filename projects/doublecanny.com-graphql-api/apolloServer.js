@@ -1,9 +1,9 @@
 import {app, httpServer} from "./httpserver";
-const {ApolloServer} = require('apollo-server-express');
 import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 import dataSources from "./graphql/dataSources";
 import * as authController from "eh_auth_and_auth/controllers/authController";
+import {ApolloServer} from "apollo-server-express";
 
 const logger = require('eh_logger');
 
@@ -28,9 +28,10 @@ const schema = {
   }
 };
 
-export const apolloServerInstance = new ApolloServer(schema);
+export let apolloServerInstance = null;
 
 export const initApollo = () => {
+  apolloServerInstance = new ApolloServer(schema);
   apolloServerInstance.applyMiddleware({app});
   apolloServerInstance.installSubscriptionHandlers(httpServer);
 }

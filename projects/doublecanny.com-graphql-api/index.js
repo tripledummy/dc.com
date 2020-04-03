@@ -8,18 +8,19 @@ import {runWebsocketServer} from "./websocketServer";
 const usersRoute = require("eh_auth_and_auth/routes/usersRoute");
 const tokenRoute = require("eh_auth_and_auth/routes/tokenRoute");
 
+
 const init = () => {
   dbi.initDB().then();
   initServer();
   authController.initializeAuthentication();
   initApollo();
-}
+};
 
 const use = () => {
   app.use("/", tokenRoute);
   app.use("/user", usersRoute);
   app.use(authController.authenticate);
-}
+};
 
 init();
 use();

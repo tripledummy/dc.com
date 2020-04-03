@@ -1,4 +1,0 @@
-type trendMutationPayload {
-    mutation: String!
-    node: Trend!
-}
