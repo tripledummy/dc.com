@@ -10,7 +10,6 @@ import {upsertTrendLayout} from "../../../modules/trends/mutations";
 import {useMutation} from "@apollo/react-hooks";
 import {useGlobal} from "reactn";
 import {EditingUserTrend} from "../../../modules/trends/globals";
-import {alertSuccess} from "../../../futuremodules/alerts/alerts";
 
 export const LayoutEditor = ({username}) => {
 

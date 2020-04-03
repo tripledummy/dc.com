@@ -55,9 +55,9 @@ const Navbar = (props) => {
           setTrend(null).then();
         }}>
           <Link to={"/"}>
-            <span className="colorLogo1">T</span>
-            <span>rends</span> <span className="colorLogo2">B</span>
-            <span>ar</span>
+            <span className="colorLogo1">D</span>
+            <span>ouble</span> <span className="colorLogo2">C</span>
+            <span>anny</span>
           </Link>
         </Navbareh>
         <NavbarTitle>{propTrendId}</NavbarTitle>
