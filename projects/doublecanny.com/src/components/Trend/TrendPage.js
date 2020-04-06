@@ -1,9 +1,9 @@
 import React, {useEffect, withGlobal} from "reactn";
 import {getAuthUserName} from "../../futuremodules/auth/authAccessors";
-import {Button} from "react-bootstrap";
+import {Button, Container, FormControl, InputGroup, Row} from "react-bootstrap";
 import {connect, hangUpCall, phoneCall, sendChatMessage} from "../../futuremodules/webrtc/client";
-import {Video} from "./TrendPageStyle";
 import {useState} from "react";
+import {Video, VideoPhoneChat} from "../../futuremodules/reactComponentStyles/reactCommon.styled";
 
 const TrendPage = (props) => {
 
@@ -14,9 +14,9 @@ const TrendPage = (props) => {
   const [wsconnection, setWSConnection] = useState(null);
   // const inChat = false;
 
-  useEffect( () => {
-    if ( !wsconnection && auth ) {
-      setWSConnection( connect(getAuthUserName(auth), messageCallback) );
+  useEffect(() => {
+    if (!wsconnection && auth) {
+      setWSConnection(connect(getAuthUserName(auth), messageCallback));
     }
   }, [auth, wsconnection]);
 
@@ -25,7 +25,7 @@ const TrendPage = (props) => {
   }
 
   const messageCallback = (msg) => {
-    setCurrentChat( m => m.concat(msg) );
+    setCurrentChat(m => m.concat(msg));
   }
 
   // if (!isUserAuthenticated(props.auth)) {
@@ -34,35 +34,45 @@ const TrendPage = (props) => {
   // }
 
   return (
-    <div className="container">
-      <div className="camerabox">
-        <Video id="received_video" width={"320px"} height={"240px"} autoPlay/>
-        <Video id="local_video" width={"320px"} height={"240px"} autoPlay muted/>
-        <Button id="call-button" onClick={() => makePhoneCall()}>
-          Call
-        </Button>
-        <Button id="hangup-button" onClick={() => hangUpCall()} disabled={true}>
-          Hang Up
-        </Button>
-      </div>
-      <div className="empty-container"/>
-      <ul>
-        {currentChat.map((elem) => {
-          return (
-            <li> {elem.timestamp} <b>{elem.username}</b>: {elem.text}</li>
-          )
-        })}
-      </ul>
-      <div className="chat-controls">
-        <input id="text" type="text" name="text" size="100" maxLength="256" placeholder="Say something meaningful..."
-               autoComplete="off" onKeyUp={(evt) => {
-          if ((evt.keyCode === 13 || evt.keyCode === 14)) {
-            sendChatMessage(evt.target.value);
-            evt.target.value = "";
-          }
-        }}/>
-      </div>
-    </div>
+    <VideoPhoneChat>
+      <Container>
+        <Row>
+          <Video id="received_video" width={"250px"} height={"240px"} autoPlay/>
+        </Row>
+        <Row>
+          <Video id="local_video" width={"250px"} height={"240px"} autoPlay muted/>
+        </Row>
+        <Row>
+          <Button id="call-button" onClick={() => makePhoneCall()}>
+            Call
+          </Button>
+          <Button id="hangup-button" onClick={() => hangUpCall()} disabled={true}>
+            Hang Up
+          </Button>
+        </Row>
+        <Row>
+          <ul>
+            {currentChat.map((elem) => {
+              return (
+                <li> {elem.timestamp} <b>{elem.username}</b>: {elem.text}</li>
+              )
+            })}
+          </ul>
+          <InputGroup className="mb-3" id="text" type="text" name="text" maxLength="256" placeholder="..."
+                      autoComplete="off" onKeyUp={(evt) => {
+            if ((evt.keyCode === 13 || evt.keyCode === 14)) {
+              sendChatMessage(evt.target.value);
+              evt.target.value = "";
+            }
+          }}>
+            <InputGroup.Prepend>
+              <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl/>
+          </InputGroup>
+        </Row>
+      </Container>
+    </VideoPhoneChat>
   )
 };
 

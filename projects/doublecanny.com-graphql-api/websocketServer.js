@@ -47,7 +47,6 @@ var appendToMakeUnique = 1;
 
 function log(text) {
   var time = new Date();
-
   console.log("[" + time.toLocaleTimeString() + "] " + text);
 }
 
@@ -307,7 +306,7 @@ wsServer.on('request', function(request) {
 
         // If the message specifies a target username, only send the
         // message to them. Otherwise, send it to every user.
-        if (msg.target && msg.target !== undefined && msg.target.length !== 0) {
+        if (msg.target && msg.target.length !== 0) {
           sendToOneUser(msg.target, msgString);
         } else {
           for (i=0; i<connectionArray.length; i++) {
@@ -349,9 +348,7 @@ export const runWebsocketServer = () => {
   webServer.listen(6503, function() {
     log("Server is listening on port 6503");
   });
-
 // Create the WebSocket server by converting the HTTPS server into one.
-
   if (!wsServer) {
     log("ERROR: Unable to create WbeSocket server!");
   }

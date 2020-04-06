@@ -71,8 +71,3 @@ export const TDAMBER = styled.td `{
   background-color: var(--warning);
 }`;
 
-export const Video = styled.video `{
-  background-color: var(--dark-color-transparent);
-  border: 1px solid var(--light);
-  border-radius: 5px;
-}`;
