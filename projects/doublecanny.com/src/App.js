@@ -36,12 +36,13 @@ const App = () => {
     <Body>
       <Navbar trendId={trendId}/>
       <Switch>
-        <Route exact path="/"  component={Landing}/>
+        <Route exact path="/" component={Landing}/>
         <Route exact path="/register" component={Register}/>
         <Route exact path="/login" component={Login}/>
         <Route exact path="/dashboarduser" render={ () => <DashboardUser auth={authApi}/> } />
         <Route path="/dashboardproject" render={ () => <DashboardProject auth={authApi}/> }/>
-        <Route path="/rooms/:usernameSplit" render={ () => <TrendPage auth={authApi}/> }/>
+        {/*<Route path="/rooms/:usernameSplit" render={ () => <TrendPage auth={authApi}/> }/>*/}
+        <Route path="/rooms/:usernameSplit" component={TrendPage}/>
       </Switch>
       <EHAlert/>
     </Body>
